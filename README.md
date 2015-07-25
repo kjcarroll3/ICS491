@@ -6,18 +6,11 @@ Kenneth Carroll
 Tsun (Jaeryn) Chu
 
 ### Version
-1.0.0
+0.0.1 (LIMITED BETA)
 
 ### Changelog:
 * July 24, 2015:
-    TEXT HERE
-
-### Installation
-You need Gulp installed globally:
-
-```sh
-$ npm i -g gulp
-```
+    Basic user interface created for BETA testing. Users can register for a username and password and no other information will be asked. Users can login to the application and access additional functionality of the application such as sell, buy, and exit. 
 
 ### Completed:
 * Password checking if entered passwords match for varification and if password meets the following requirements of at least one uppercase, one lowercase, and one special character and a minimum length of 12. 
