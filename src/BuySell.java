@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class BuySell {
@@ -41,6 +42,8 @@ public class BuySell {
 		String item_desc = "";
 		String item_price = "";
 		boolean priceIsInt = false;
+		
+		int length = 5;
 		
 		Scanner user_input = new Scanner(System.in);
 		
@@ -244,7 +247,7 @@ public class BuySell {
 					switch(command)
 					{
 						case "1" : 
-							String adId = "";
+							long adId = 0;
 							int count = 0;
 							
 							System.out.printf("--- Creating new ad ---\nPlease provide the item name, its description, and price\nItem for sale: ");
@@ -257,21 +260,20 @@ public class BuySell {
 							item_price = user_input.nextLine();
 							} while (!isPriceNumber(item_price));
 							
+							adId = randomNumber(length); 
+							
 							stmt = conn.createStatement();
 							rs = stmt.executeQuery("SELECT COUNT(*) AS count FROM PRODUCT");
 							rs.next();
 							count = rs.getInt("count");
-							
-							/*stmt = conn.createStatement();
-							stmt.executeUpdate("INSERT INTO Product " + "VALUES('" + adId  + "', '" + item_name + "', '" + item_price + "', '" + item_desc + "',"
-									+ " '" + uid + "', '" + pwd + "'");
-							conn.commit();*/
+						
+							stmt = conn.createStatement();
+							stmt.executeUpdate("INSERT INTO Product " + "VALUES('" + item_name  + "', '" + item_price + "', '" + item_desc + "', '" + adId + "',"+ " '" + uid + "', '" + pwd + "')");
+							conn.commit();
 							
 							rs.close();
 							stmt.close();
-							
-							adId = "" + count; 
-									
+								
 							System.out.println("Thank you, your ad has been posted!");
 							System.out.println("Summary--");
 							System.out.println("Order number: " + adId + "\nItem Name: " + item_name + "\nDescription: " + item_desc
@@ -326,6 +328,17 @@ public class BuySell {
 			System.out.println("Error, only numbers are allowed. Please re-enter credit card number!");
 			return false;
 		}
+	}
+	public static long randomNumber(int length)
+	{
+		Random random = new Random();
+		char[] digits = new char[length];
+		digits[0] = (char) (random.nextInt(9) + '1');
+		for (int i = 1; i < length; i++)
+		{
+			digits[i] = (char) (random.nextInt(10) + '0');
+		}
+		return Long.parseLong(new String(digits));
 	}
 
 }
