@@ -17,10 +17,15 @@ Tsun (Jaeryn) Chu
 * User registration interface (basic of just asking for username and password)
 * User login interface
     *  Additional interface after sucessful logon such as sell, buy, exit program
+        *  Able to "Sell" and write to database
 * Queries to insert data into database tables
 * Connection to database (mysql)
+* 
 
 ### Incomplete:
 * User registration interface needs:
     * first name, last name, address, city, state, zip code, email address, and credit card number 
-*
+* Way to search database and display "published" entries only
+
+### Member Contributions:
+Everyone worked on the entire project together as well as planning what columns should be created in each table and common variable names in the program and table columns. All query code was implemented my Kenneth and the basic skeleton structure was created by Evan and Tsun. 
