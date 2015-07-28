@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -27,6 +28,13 @@ public class BuySell {
 		String input;
 		String uid = "";
 		String pwd = "";
+		String fname = "";
+		String lname = "";
+		String street = "";
+		String city = "";
+		String state = "";
+		String email = "";
+		String cc_num = "";
 		String item_name;
 		String item_desc;
 		String item_price;
@@ -37,7 +45,7 @@ public class BuySell {
 		{
 			//Connect to database
 			System.out.printf("Connecting to database.......\n\n");
-			conn = DriverManager.getConnection(URL, "root", "powerful1");
+			conn = DriverManager.getConnection(URL, "root", "##WingGundam2015$$");
 			if(conn != null)
 			{
 				conn.setAutoCommit(false);
@@ -88,6 +96,10 @@ public class BuySell {
 												    loggedIn = input.equals(pwd);
 												    if(loggedIn) System.out.printf("Congratulations, you are now logged in as %s, welcome to BuyIt!\n", uid);
 											    }
+											    
+											    //User information
+											    System.out.printf("First Name: ");
+											    fname = user_input.nextLine();
 										    }			
 										    /**CHANGE HERE 2 **/
 										   	stmt = conn.prepareStatement("INSERT INTO CUSTOMER VALUES(?,?)");
@@ -214,7 +226,7 @@ public class BuySell {
 					
 					switch(command)
 					{
-						case "1" : String adId; //SELL
+						case "1" : long adId; //SELL
 								   String search;
 								   int count;
 									
@@ -232,14 +244,14 @@ public class BuySell {
 								   rs = stmt.executeQuery("SELECT COUNT(*) AS count FROM PRODUCT");
 								   rs.next();
 								   count = rs.getInt("count");
-								   adId = "" + count; 	
+								   adId = randomNumber(5); 	
 									
 								   /**Insert ad into database**/
 								   //stmt = conn.createStatement();
 								   
 								   /**CHANGE HERE 4**/
 								   PreparedStatement sell_stmt = conn.prepareStatement("INSERT INTO Product VALUES(?, ?, ?, ?, ?, ?)");
-								   sell_stmt.setString(1, adId);
+								   sell_stmt.setLong(1, adId);
 								   sell_stmt.setString(2, item_name);
 								   sell_stmt.setString(3, item_price);
 								   sell_stmt.setString(4, item_desc);
@@ -391,5 +403,17 @@ public class BuySell {
 	    }
 	    return true;
 	}
-
+	
+	/**Random number generator for AD ID field in database. Doesn't assign duplicates**/
+	public static long randomNumber(int length)
+	{
+		Random random = new Random();
+		char[] digits = new char[length];
+		digits[0] = (char) (random.nextInt(9) + '1');
+		for (int i = 1; i < length; i++)
+		{
+			digits[i] = (char) (random.nextInt(10) + '0');
+		}
+		return Long.parseLong(new String(digits));
+	}
 }
