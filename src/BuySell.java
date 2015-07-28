@@ -33,11 +33,12 @@ public class BuySell {
 		String street = "";
 		String city = "";
 		String state = "";
+		String zip_code = "";
 		String email = "";
 		String cc_num = "";
-		String item_name;
-		String item_desc;
-		String item_price;
+		String item_name = "";
+		String item_desc = "";
+		String item_price = "";
 		
 		Scanner user_input = new Scanner(System.in);
 		
@@ -99,12 +100,41 @@ public class BuySell {
 											    
 											    //User information
 											    System.out.printf("First Name: ");
-											    fname = user_input.nextLine();
+											    fname = user_input.nextLine();  //first name
+											    
+											    System.out.printf("Last Name: ");
+											    lname = user_input.nextLine();  //last name
+											    
+											    System.out.printf("Street: ");
+											    street = user_input.nextLine();
+											    
+											    System.out.printf("City: ");
+											    city = user_input.nextLine();
+											    
+											    System.out.printf("State: ");
+											    state = user_input.nextLine();
+											    
+											    System.out.printf("Zip Code: ");
+											    zip_code = user_input.nextLine();
+											    
+											    System.out.printf("Email: ");
+											    email = user_input.nextLine();
+											    
+											    System.out.printf("Credit Card Number: ");
+											    cc_num = user_input.nextLine();
 										    }			
 										    /**CHANGE HERE 2 **/
-										   	stmt = conn.prepareStatement("INSERT INTO CUSTOMER VALUES(?,?)");
+										   	stmt = conn.prepareStatement("INSERT INTO CUSTOMER VALUES(?,?,?,?,?,?,?,?,?,?)");
 										   	stmt.setString(1, uid);
 										   	stmt.setString(2, pwd);
+										   	stmt.setString(3, fname);
+										   	stmt.setString(4, lname);
+										   	stmt.setString(5, street);
+										   	stmt.setString(6, city);
+										   	stmt.setString(7, state);
+										   	stmt.setString(8, zip_code);
+										   	stmt.setString(9, email);
+										   	stmt.setString(10, cc_num);
 										   	stmt.executeUpdate();
 											//stmt = conn.createStatement();
 											//stmt.executeUpdate("INSERT INTO Customer " + "VALUES('" + uid + "', '" + pwd + "')");
@@ -228,7 +258,7 @@ public class BuySell {
 					{
 						case "1" : long adId; //SELL
 								   String search;
-								   int count;
+								   String ad_status = "published";
 									
       						       System.out.printf("--- Creating new ad ---\nPlease provide the item name, its description, and price\nItem for sale: ");
 								   item_name = user_input.nextLine().trim();
@@ -243,20 +273,20 @@ public class BuySell {
 								   //stmt = conn.createStatement();
 								   rs = stmt.executeQuery("SELECT COUNT(*) AS count FROM PRODUCT");
 								   rs.next();
-								   count = rs.getInt("count");
 								   adId = randomNumber(5); 	
 									
 								   /**Insert ad into database**/
 								   //stmt = conn.createStatement();
 								   
 								   /**CHANGE HERE 4**/
-								   PreparedStatement sell_stmt = conn.prepareStatement("INSERT INTO Product VALUES(?, ?, ?, ?, ?, ?)");
+								   PreparedStatement sell_stmt = conn.prepareStatement("INSERT INTO Product VALUES(?, ?, ?, ?, ?, ?,?)");
 								   sell_stmt.setLong(1, adId);
 								   sell_stmt.setString(2, item_name);
 								   sell_stmt.setString(3, item_price);
 								   sell_stmt.setString(4, item_desc);
 								   sell_stmt.setString(5, uid);
 								   sell_stmt.setString(6, pwd);
+								   sell_stmt.setString(7, ad_status);
 								   sell_stmt.executeUpdate();
 								   
 								   /*stmt.executeUpdate("INSERT INTO Product " + "VALUES('" + adId  + "', '" + item_name + "', '" + item_price + "', '" + item_desc + "',"
