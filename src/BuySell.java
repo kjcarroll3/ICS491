@@ -312,7 +312,7 @@ public class BuySell {
 			                       //stmt = conn.createStatement();
 						           
 						           /**CHANGE HERE 5**/
-								   PreparedStatement search_stmt = conn.prepareStatement("SELECT * FROM PRODUCT WHERE UPPER(prod_description)LIKE UPPER(?) OR UPPER(prod_name)LIKE UPPER(?) ");
+								   PreparedStatement search_stmt = conn.prepareStatement("SELECT * FROM PRODUCT WHERE UPPER(item_desc)LIKE UPPER(?) OR UPPER(item_name)LIKE UPPER(?) ");
 								   search_stmt.setString(1, "%"+search+"%");
 								   search_stmt.setString(2, "%"+search+"%");
 								   rs = search_stmt.executeQuery();
@@ -322,17 +322,19 @@ public class BuySell {
 			                       System.out.printf("%-30.30s %-30.30s %-30.30s %-30.30s %-30.30s\n", "Ad ID", "Item", "Seller", "Price", "Description");
 			                       while(rs.next())
 			                       {
-			                           ad_ID = rs.getString("PROD_ID");
-			                           search_item = rs.getString("PROD_NAME");
+			                           ad_ID = rs.getString("ADID");
+			                           search_item = rs.getString("ITEM_NAME");
 			                           seller = rs.getString("UID");
-			                           search_price = rs.getString("PROD_PRICE");
-			                           search_desc = rs.getString("PROD_DESCRIPTION");
+			                           search_price = rs.getString("ITEM_PRICE");
+			                           search_desc = rs.getString("ITEM_DESC");
 			                           System.out.printf("%-30.30s %-30.30s %-30.30s %-30.30s %-30.30s", ad_ID, search_item, seller, search_price, search_desc);
 			                       }
 			                       System.out.println();
 			                       break;
 						case "3" : String buy_ID; //BUY
 								   String buy_confirm;
+								   String new_status = "unpublished";
+								   
 								   System.out.print("Enter the ID of the item you would like to purchase: ");
 								   buy_ID = user_input.nextLine().trim();
 								   
@@ -340,7 +342,7 @@ public class BuySell {
 			                       //stmt = conn.createStatement();
 								   
 								   /**CHANGE HERE 6**/
-								   PreparedStatement buy_stmt = conn.prepareStatement("SELECT * FROM PRODUCT WHERE PROD_ID = ?");
+								   PreparedStatement buy_stmt = conn.prepareStatement("SELECT * FROM PRODUCT WHERE ADID = ?");
 								   buy_stmt.setString(1, buy_ID);
 								   rs = buy_stmt.executeQuery();
 								   
@@ -348,13 +350,13 @@ public class BuySell {
 			                       System.out.printf("\n%-30.30s %-30.30s %-30.30s %-30.30s %-30.30s\n", "Ad ID", "Item", "Seller", "Price", "Description");
 			                       if (rs.next())
 			                       {
-			                           ad_ID = rs.getString("PROD_ID");
-			                           search_item = rs.getString("PROD_NAME");
+			                    	   //need to limit searches to "published" status only
+			                           ad_ID = rs.getString("ADID");
+			                           search_item = rs.getString("ITEM_NAME");
 			                           seller = rs.getString("UID");
-			                           search_price = rs.getString("PROD_PRICE");
-			                           search_desc = rs.getString("PROD_DESCRIPTION");
+			                           search_price = rs.getString("ITEM_PRICE");
+			                           search_desc = rs.getString("ITEM_DESC");
 			                           System.out.printf("%-30.30s %-30.30s %-30.30s %-30.30s %-30.30s\n", ad_ID, search_item, seller, search_price, search_desc);
-			                           
 			                           System.out.printf("\nAd found. Would you like to purchase? (y/n): ");
 			                           buy_confirm = user_input.nextLine().trim();
 			                           if (buy_confirm.toLowerCase().equals("y"))
@@ -362,10 +364,9 @@ public class BuySell {
 			                            
 											try
 				                            {
-												/**Need to implement way to delete from database without causing future ID conflicts**/
+												/**need to set published status to unpublished so search will show.**/
 				                                //stmt = conn.createStatement();				                               
-				                                stmt.executeUpdate("UPDATE PRODUCT SET PROD_ID = '-1' WHERE PROD_ID = '" + buy_ID + "'");
-
+				                                stmt.executeUpdate("UPDATE PRODUCT SET ADID = '-1' WHERE ADID = '" + buy_ID + "'");
 				                            }
 				                            catch(SQLException z)
 				                            {
